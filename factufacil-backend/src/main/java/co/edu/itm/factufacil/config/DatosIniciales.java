@@ -6,11 +6,11 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.ApplicationArguments;
-import org.springframework.boot.ApplicationRunner;
+import org.springframework.beans.factory.SmartInitializingSingleton;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -23,10 +23,12 @@ import java.util.*;
  * Al arrancar: crea los catálogos fijos (roles, empresa, secuencia) y un usuario desarrollador.
  * Si factufacil.datos-demo=true y no hay productos, carga datos ficticios para la demostración.
  * Contraseña de los usuarios de prueba: 1234.
+ * Se ejecuta ANTES de que el servidor web acepte peticiones: así nadie intenta
+ * ingresar mientras la base todavía está vacía (importante en Render, que reinicia la base al despertar).
  */
 @Component
 @RequiredArgsConstructor
-public class DatosIniciales implements ApplicationRunner {
+public class DatosIniciales implements SmartInitializingSingleton {
     private static final Logger log = LoggerFactory.getLogger(DatosIniciales.class);
     private static final String CLAVE_DEMO = "1234";
 
@@ -45,13 +47,17 @@ public class DatosIniciales implements ApplicationRunner {
     private final NovedadRepo novedades;
     private final LogAuditoriaRepo auditoria;
     private final PasswordEncoder encoder;
+    private final PlatformTransactionManager transacciones;
 
     @Value("${factufacil.datos-demo:false}")
     private boolean datosDemo;
 
     @Override
-    @Transactional
-    public void run(ApplicationArguments args) {
+    public void afterSingletonsInstantiated() {
+        new TransactionTemplate(transacciones).executeWithoutResult(t -> cargar());
+    }
+
+    private void cargar() {
         for (String r : List.of("DESARROLLADOR", "JEFE", "ADMIN", "EMPLEADO")) {
             if (roles.findByNombre(r).isEmpty()) { Rol x = new Rol(); x.setNombre(r); roles.save(x); }
         }
