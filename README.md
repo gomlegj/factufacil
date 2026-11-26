@@ -10,6 +10,13 @@ Proyecto integrador del curso Gestión de Proyectos — Ingeniería de Sistemas,
 | Servidor | Java 21, Spring Boot 3.3, Spring Security + JWT, Spring Data JPA | [`factufacil-backend`](factufacil-backend) |
 | Base de datos | MySQL 8 / MariaDB (H2 en modo MySQL para la demostración) | [`factufacil-backend/database`](factufacil-backend/database) |
 
+## Versión publicada
+
+- **Aplicación:** https://gomlegj.github.io/factufacil/ (usuarios de prueba abajo, contraseña `1234`)
+- **API:** https://factufacil-api.onrender.com/api (Render, plan gratuito)
+
+El servidor gratuito se duerme tras 15 minutos sin uso: la primera carga después puede tardar cerca de un minuto, y al despertar la base vuelve a los datos de prueba. La interfaz se publica sola con cada cambio en `factufacil-frontend`; el servidor se actualiza en Render con *Manual Deploy → Deploy latest commit*.
+
 ## Correr el proyecto completo
 
 Requisitos: Java 21 y Node.js 18 o superior. No hace falta instalar Maven ni una base de datos.
