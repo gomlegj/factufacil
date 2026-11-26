@@ -1,0 +1,16 @@
+# Blueprint de Render: crea el servidor desde factufacil-backend/Dockerfile.
+# Plan gratuito: se duerme tras 15 minutos sin uso y la base H2 de demostración
+# se vuelve a crear (con datos de prueba) cada vez que el servicio reinicia.
+services:
+  - type: web
+    name: factufacil-api
+    runtime: docker
+    plan: free
+    rootDir: factufacil-backend
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /api/salud
+    envVars:
+      - key: FACTUFACIL_JWT_SECRET
+        generateValue: true
+      - key: FACTUFACIL_CORS
+        sync: false   # se escribe al crear: https://<usuario>.github.io

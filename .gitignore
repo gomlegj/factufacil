@@ -1,0 +1,21 @@
+# Documentos del curso (no se publican: tienen datos personales del equipo)
+Equipo_15.docx
+*.docx
+Bases que se tienen/
+
+# Dependencias y compilados
+node_modules/
+dist/
+target/
+
+# Base H2 de la demostración (se recrea sola al arrancar)
+factufacil-backend/data/
+
+# Variables locales y archivos del sistema
+.env.local
+.env.*.local
+*.log
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
